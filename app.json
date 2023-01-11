@@ -2,6 +2,7 @@
   "name": "MoneyApp",
   "displayName": "MoneyApp",
   "expo": {
+    "userInterfaceStyle":"automatic",
     "name": "MoneyApp",
     "slug": "MoneyApp",
     "scheme": "moneyapp",
@@ -19,6 +20,7 @@
     "jsEngine": "hermes",
     "assetBundlePatterns": ["**/*"],
     "android": {
+    "userInterfaceStyle":"automatic",
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.moneyapp",
       "adaptiveIcon": {
@@ -32,6 +34,7 @@
       }
     },
     "ios": {
+    "userInterfaceStyle":"automatic",
       "icon": "./assets/images/app-icon-ios.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.moneyapp",
