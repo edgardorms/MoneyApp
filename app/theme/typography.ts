@@ -10,7 +10,20 @@ import {
   SpaceGrotesk_700Bold as spaceGroteskBold,
 } from "@expo-google-fonts/space-grotesk"
 
+import  {
+  Montserrat_300Light as MonLight,
+  Montserrat_400Regular as MonRegular,
+  Montserrat_500Medium as MonMedium,
+  Montserrat_600SemiBold as MonSemiBold,
+  Montserrat_700Bold as MonBold
+ } from '@expo-google-fonts/montserrat';
+
 export const customFontsToLoad = {
+  MonLight,
+  MonRegular,
+  MonMedium,
+  MonSemiBold,
+  MonBold,
   spaceGroteskLight,
   spaceGroteskRegular,
   spaceGroteskMedium,
@@ -19,6 +32,13 @@ export const customFontsToLoad = {
 }
 
 const fonts = {
+  Montserrat:{
+    light: "MonLight",
+    normal: "MonRegular",
+    medium: "MonMedium",
+    semiBold: "MonSemiBold",
+    bold: "MonBold",
+  },
   spaceGrotesk: {
     // Cross-platform Google font.
     light: "spaceGroteskLight",
