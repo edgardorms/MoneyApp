@@ -17,7 +17,7 @@ interface Account {
   balance: string
 }
 type Props = {
-  account: Account;
+  account: Account
 }
 
 const AccountCard: React.FC<Props> = (props) => {
@@ -43,7 +43,7 @@ const AccountCard: React.FC<Props> = (props) => {
   const $textAccountNumberColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.gray_300,
   }
- 
+
   const $textCardBlackColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.gray_300,
   }
@@ -62,7 +62,9 @@ const AccountCard: React.FC<Props> = (props) => {
         <View style={$containerAccountNumber}>
           <View>
             <Text style={[$textAccount, $textAccountColor]}>{props.account.type}</Text>
-            <Text style={[$textAccountNumber, $textAccountNumberColor]}>{props.account.number}</Text>
+            <Text style={[$textAccountNumber, $textAccountNumberColor]}>
+              {props.account.number}
+            </Text>
           </View>
           <TouchableOpacity style={$buttonMore}>
             <Image resizeMode="cover" source={require("../../assets/more-button.png")} />
@@ -81,9 +83,7 @@ const AccountCard: React.FC<Props> = (props) => {
           </View>
         </View>
         <View>
-          <Text style={[$textBalanceNumber, $textBalanceNumberColor]}>
-            {props.account.balance}
-          </Text>
+          <Text style={[$textBalanceNumber, $textBalanceNumberColor]}>{props.account.balance}</Text>
           <Text style={[$textBalance, $textBalanceColor]}>Current balance</Text>
         </View>
       </View>

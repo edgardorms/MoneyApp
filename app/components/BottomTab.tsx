@@ -7,7 +7,6 @@ const BottomTab = () => {
 
   const $tabBarColor: ViewStyle = {
     backgroundColor: colorScheme === "light" ? colors.palette.white : colors.paletteBlack.gray_400,
-
   }
 
   return (
@@ -44,6 +43,5 @@ const $containerTabBar: ViewStyle = {
   alignItems: "center",
   marginTop: 15,
 }
-
 
 export default BottomTab

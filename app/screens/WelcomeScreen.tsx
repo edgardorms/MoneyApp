@@ -106,7 +106,6 @@ const API = {
       amount: 11215,
       currency: "USD",
     },
-    
   ],
 }
 
@@ -163,7 +162,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
           </View>
         </View>
       </View>
-      <BottomTab />
+      {/* <BottomTab /> */}
     </ScrollView>
   )
 })
@@ -180,8 +179,8 @@ const $containerRecentTransactions: ViewStyle = {
 }
 
 const $containerApp: ViewStyle = {
-//  width: "100%",
- // height: 812,
+  //  width: "100%",
+  // height: 812,
 }
 
 const $containerFlex: ViewStyle = {

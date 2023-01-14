@@ -15,16 +15,16 @@ interface Transaction {
 }
 
 type Props = {
-  transaction: Transaction;
+  transaction: Transaction
 }
 
 const TransactionCard: React.FC<Props> = (props) => {
   const colorScheme = useColorScheme()
 
-// color amount selector
+  // color amount selector
   $amountStyle = props.transaction.amount > 0 ? $textCoinPlus : $textCoinMinus
 
-// transfer icon selector
+  // transfer icon selector
   switch (props.transaction.type) {
     case "Comute":
       typeImage = require("../../assets/comute-icon.png")
@@ -44,7 +44,7 @@ const TransactionCard: React.FC<Props> = (props) => {
     default:
       typeImage = require("../../assets/personal-transaction-icon.png")
   }
-// dark mode
+  // dark mode
   const $textTransactionColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
   }
