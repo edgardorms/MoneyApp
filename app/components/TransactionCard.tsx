@@ -5,7 +5,20 @@ import { colors } from "../theme/colors"
 let $amountStyle
 let typeImage
 
-const TransactionCard = (props) => {
+interface Transaction {
+  idTransaction: number
+  type: string
+  description: string
+  datetime: string
+  amount: number
+  currency: string
+}
+
+type Props = {
+  transaction: Transaction;
+}
+
+const TransactionCard: React.FC<Props> = (props) => {
   const colorScheme = useColorScheme()
 
 // color amount selector

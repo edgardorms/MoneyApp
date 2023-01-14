@@ -10,7 +10,17 @@ import {
 import React from "react"
 import { colors } from "../theme/colors"
 
-const AccountCard = (props) => {
+interface Account {
+  idAccount: number
+  type: string
+  number: string
+  balance: string
+}
+type Props = {
+  account: Account;
+}
+
+const AccountCard: React.FC<Props> = (props) => {
   const colorScheme = useColorScheme()
 
   const $subContainer: ViewStyle = {
@@ -51,8 +61,8 @@ const AccountCard = (props) => {
       <View style={[$subContainer, $subContainerColor]}>
         <View style={$containerAccountNumber}>
           <View>
-            <Text style={[$textAccount, $textAccountColor]}>{props.accounts.type}</Text>
-            <Text style={[$textAccountNumber, $textAccountNumberColor]}>{props.accounts.number}</Text>
+            <Text style={[$textAccount, $textAccountColor]}>{props.account.type}</Text>
+            <Text style={[$textAccountNumber, $textAccountNumberColor]}>{props.account.number}</Text>
           </View>
           <TouchableOpacity style={$buttonMore}>
             <Image resizeMode="cover" source={require("../../assets/more-button.png")} />
@@ -72,7 +82,7 @@ const AccountCard = (props) => {
         </View>
         <View>
           <Text style={[$textBalanceNumber, $textBalanceNumberColor]}>
-            {props.accounts.balance}
+            {props.account.balance}
           </Text>
           <Text style={[$textBalance, $textBalanceColor]}>Current balance</Text>
         </View>

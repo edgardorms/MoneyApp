@@ -131,7 +131,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
       <FlatList
         data={API.accounts}
         keyExtractor={(item) => item.number}
-        renderItem={({ item }) => <AccountCard accounts={item} />}
+        renderItem={({ item }) => <AccountCard account={item} />}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         pagingEnabled
@@ -151,6 +151,7 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
               <TransactionCard
                 key={transaction.idTransaction}
                 transaction={{
+                  idTransaction: transaction.idTransaction,
                   type: transaction.type,
                   description: transaction.description,
                   datetime: transaction.datetime,
