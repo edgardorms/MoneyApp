@@ -13,92 +13,46 @@ import { colors } from "../theme/colors"
 const AccountCard = (props) => {
   const colorScheme = useColorScheme()
 
-  const $containerPrimary: ViewStyle = {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-    marginHorizontal: 17,
-  }
   const $subContainer: ViewStyle = {
     width: 329,
     height: 185,
-    backgroundColor: colorScheme === "light" ? colors.palette.white : colors.paletteBlack.gray_400,
     borderRadius: 25,
     paddingHorizontal: 15,
     paddingTop: 10,
     paddingBottom: 13,
   }
-  const $containerAccountNumber: ViewStyle = {
-    flexDirection: "row",
+
+  const $subContainerColor: ViewStyle = {
+    backgroundColor: colorScheme === "light" ? colors.palette.white : colors.paletteBlack.gray_400,
   }
-  const $textAcoount: TextStyle = {
+
+  const $textAccountColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
-    fontFamily: "MonBold",
-    fontSize: 22,
-    fontWeight: "700",
   }
-  const $textAcoountNumber: TextStyle = {
+
+  const $textAccountNumberColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.gray_300,
-    fontFamily: "MonSemiBold",
-    fontSize: 12,
-    fontWeight: "600",
   }
-  const $buttonMore: ViewStyle = {
-    marginLeft: 95,
-  }
-  const $textCardBlack: TextStyle = {
+ 
+  const $textCardBlackColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.gray_300,
-    fontFamily: "MonSemiBold",
-    fontSize: 12,
-    fontWeight: "600",
-  }
-  const $textCardWhite: TextStyle = {
-    color: colors.palette.white,
-    fontFamily: "MonSemiBold",
-    fontSize: 12,
-    fontWeight: "600",
   }
 
-  const $containerCoins: ViewStyle = {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: 134,
-    marginTop: 14,
-    marginBottom: 16,
-  }
-
-  const $cardCoins: ViewStyle = {
-    width: 45,
-    height: 25,
-    borderRadius: 8,
-    backgroundColor: colors.palette.blue,
-    justifyContent: "center",
-    alignItems: "center",
-  }
-
-  const $textBalanceNumber: TextStyle = {
+  const $textBalanceNumberColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
-    fontFamily: "MonBold",
-    fontSize: 32,
-    fontWeight: "700",
-    lineHeight: 41,
   }
 
-  const $textBalance: TextStyle = {
+  const $textBalanceColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
-    fontFamily: "MonRegular",
-    fontSize: 15,
-    fontWeight: "400",
   }
 
   return (
     <View style={$containerPrimary}>
-      <View style={$subContainer}>
+      <View style={[$subContainer, $subContainerColor]}>
         <View style={$containerAccountNumber}>
           <View>
-            <Text style={$textAcoount}>{props.accounts.type}</Text>
-            <Text style={$textAcoountNumber}>{props.accounts.number}</Text>
+            <Text style={[$textAccount, $textAccountColor]}>{props.accounts.type}</Text>
+            <Text style={[$textAccountNumber, $textAccountNumberColor]}>{props.accounts.number}</Text>
           </View>
           <TouchableOpacity style={$buttonMore}>
             <Image resizeMode="cover" source={require("../../assets/more-button.png")} />
@@ -110,15 +64,17 @@ const AccountCard = (props) => {
             <Text style={$textCardWhite}>EUR</Text>
           </View>
           <View>
-            <Text style={$textCardBlack}>USD</Text>
+            <Text style={[$textCardBlack, $textCardBlackColor]}>USD</Text>
           </View>
           <View>
-            <Text style={$textCardBlack}>GBP</Text>
+            <Text style={[$textCardBlack, $textCardBlackColor]}>GBP</Text>
           </View>
         </View>
         <View>
-          <Text style={$textBalanceNumber}>{props.accounts.balance}</Text>
-          <Text style={$textBalance}>Current balance</Text>
+          <Text style={[$textBalanceNumber, $textBalanceNumberColor]}>
+            {props.accounts.balance}
+          </Text>
+          <Text style={[$textBalance, $textBalanceColor]}>Current balance</Text>
         </View>
       </View>
     </View>
@@ -126,3 +82,72 @@ const AccountCard = (props) => {
 }
 
 export default AccountCard
+const $containerPrimary: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "center",
+  marginTop: 10,
+  marginHorizontal: 17,
+}
+
+const $buttonMore: ViewStyle = {
+  marginLeft: 95,
+}
+
+const $containerAccountNumber: ViewStyle = {
+  flexDirection: "row",
+}
+
+const $textCardWhite: TextStyle = {
+  color: colors.palette.white,
+  fontFamily: "MonSemiBold",
+  fontSize: 12,
+  fontWeight: "600",
+}
+
+const $containerCoins: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: 134,
+  marginTop: 14,
+  marginBottom: 16,
+}
+
+const $cardCoins: ViewStyle = {
+  width: 45,
+  height: 25,
+  borderRadius: 8,
+  backgroundColor: colors.palette.blue,
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const $textBalance: TextStyle = {
+  fontFamily: "MonRegular",
+  fontSize: 15,
+  fontWeight: "400",
+}
+
+const $textBalanceNumber: TextStyle = {
+  fontFamily: "MonBold",
+  fontSize: 32,
+  fontWeight: "700",
+  lineHeight: 41,
+}
+const $textAccountNumber: TextStyle = {
+  fontFamily: "MonSemiBold",
+  fontSize: 12,
+  fontWeight: "600",
+}
+
+const $textAccount: TextStyle = {
+  fontFamily: "MonBold",
+  fontSize: 22,
+  fontWeight: "700",
+}
+
+const $textCardBlack: TextStyle = {
+  fontFamily: "MonSemiBold",
+  fontSize: 12,
+  fontWeight: "600",
+}

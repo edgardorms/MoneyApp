@@ -5,25 +5,13 @@ import { colors } from "../theme/colors"
 const BottomTab = () => {
   const colorScheme = useColorScheme()
 
-  const $tabBar: ViewStyle = {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    width: 390,
-    height: 96,
+  const $tabBarColor: ViewStyle = {
     backgroundColor: colorScheme === "light" ? colors.palette.white : colors.paletteBlack.gray_400,
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
-  }
 
-  const $containerTabBar: ViewStyle = {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 15,
   }
 
   return (
-    <View style={$containerTabBar}>
+    <View style={[$containerTabBar, $tabBarColor]}>
       <View style={$tabBar}>
         <TouchableOpacity>
           <Image resizeMode="cover" source={require("../../assets/wallet-icon.png")} />
@@ -41,5 +29,21 @@ const BottomTab = () => {
     </View>
   )
 }
+const $tabBar: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+  alignItems: "center",
+  width: 390,
+  height: 96,
+  borderTopRightRadius: 30,
+  borderTopLeftRadius: 30,
+}
+
+const $containerTabBar: ViewStyle = {
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 15,
+}
+
 
 export default BottomTab
