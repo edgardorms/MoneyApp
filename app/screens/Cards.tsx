@@ -1,10 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export const FirstScreen = () => {
+export const Cards = () => {
   return (
     <View>
-      <Text>FirstScreen</Text>
+      <Text>Cards</Text>
     </View>
   )
 }
+

@@ -12,7 +12,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import {  SecondScreen, AllTransactions, WelcomeScreen } from "../screens"
+import { TransactionDetails, AllTransactions, Settings } from "../screens"
 import { BottomTabNavigator } from "./BottomTabNavigation"
 import { colors } from "../theme"
 
@@ -31,7 +31,10 @@ import { colors } from "../theme"
  */
 export type AppStackParamList = {
   Welcome: undefined
- 
+  Transaction: undefined
+  AllTransactions: undefined
+  Settings: undefined
+
   // 🔥 Your screens go here
 }
 
@@ -51,10 +54,15 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false}}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={BottomTabNavigator} />
-    
-
+      <Stack.Group screenOptions={{ presentation: "modal", animation: "slide_from_bottom" }}>
+        <Stack.Screen name="Transaction" component={TransactionDetails} />
+      </Stack.Group>
+      <Stack.Screen name="AllTransactions" component={AllTransactions} />
+      <Stack.Group screenOptions={{ presentation: "modal", animation: "slide_from_bottom" }}>
+        <Stack.Screen name="Settings" component={Settings} />
+      </Stack.Group>
       {/** 🔥 Your screens go here */}
     </Stack.Navigator>
   )

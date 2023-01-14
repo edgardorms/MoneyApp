@@ -58,7 +58,7 @@ const TransactionCard: React.FC<Props> = (props) => {
       <View style={$containerPrimary}>
         <View style={$containerSecondary}>
           <View style={$containerIMG}>
-            <Image resizeMode="cover" source={typeImage} />
+            <Image resizeMode="cover" source={typeImage}  />
           </View>
           <View>
             <Text style={[$textTransaction, $textTransactionColor]}>

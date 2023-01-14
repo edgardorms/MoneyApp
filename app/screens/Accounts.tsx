@@ -15,7 +15,7 @@ import { colors } from "../theme"
 import AccountHistory from "../components/AccountHistory"
 import AccountCard from "../components/AccountCard"
 import TransactionCard from "../components/TransactionCard"
-import BottomTab from "../components/BottomTab"
+import { useNavigation } from "@react-navigation/native"
 
 const API = {
   accounts: [
@@ -109,8 +109,9 @@ const API = {
   ],
 }
 
-export const WelcomeScreen = observer(function WelcomeScreen() {
+export const Accounts = observer(function WelcomeScreen() {
   const colorScheme = useColorScheme()
+  const navigation = useNavigation()
 
   const $containerAppColor: ViewStyle = {
     backgroundColor: colorScheme === "light" ? colors.palette.blue : colors.paletteBlack.gray_500,
@@ -140,24 +141,28 @@ export const WelcomeScreen = observer(function WelcomeScreen() {
         <View style={[$containerFlex, $containerFlexColor]}>
           <View style={$containerRecentTransactions}>
             <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("AllTransactions")}>
               <Image resizeMode="cover" source={require("../../assets/filter-button.png")} />
             </TouchableOpacity>
           </View>
 
           <View>
             {API.transactions.slice(-5).map((transaction) => (
-              <TransactionCard
+              <TouchableOpacity
                 key={transaction.idTransaction}
-                transaction={{
-                  idTransaction: transaction.idTransaction,
-                  type: transaction.type,
-                  description: transaction.description,
-                  datetime: transaction.datetime,
-                  amount: transaction.amount,
-                  currency: transaction.currency,
-                }}
-              />
+                onPress={() => navigation.navigate("Transaction")}
+              >
+                <TransactionCard
+                  transaction={{
+                    idTransaction: transaction.idTransaction,
+                    type: transaction.type,
+                    description: transaction.description,
+                    datetime: transaction.datetime,
+                    amount: transaction.amount,
+                    currency: transaction.currency,
+                  }}
+                />
+              </TouchableOpacity>
             ))}
           </View>
         </View>

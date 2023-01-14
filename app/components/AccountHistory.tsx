@@ -1,15 +1,18 @@
 import { View, Text, TouchableOpacity, Image, ViewStyle, TextStyle } from "react-native"
 import React from "react"
 import { colors } from "../theme/colors"
+import { useNavigation } from "@react-navigation/native"
 
 const AccountHistory = () => {
+  const navigation = useNavigation()
+
   return (
     <View>
       <View style={$containerPrimary}>
         <View>
           <Text style={$text1}>Account History</Text>
         </View>
-        <TouchableOpacity style={$configIMG}>
+        <TouchableOpacity style={$configIMG} onPress={() => navigation.navigate("Settings")}>
           <Image resizeMode="cover" source={require("../../assets/settings-2.png")} />
         </TouchableOpacity>
       </View>
