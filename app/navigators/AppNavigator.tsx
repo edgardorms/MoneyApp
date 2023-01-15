@@ -14,7 +14,6 @@ import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TransactionDetails, AllTransactions, Settings } from "../screens"
 import { BottomTabNavigator } from "./BottomTabNavigation"
-import { colors } from "../theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -54,12 +53,12 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false}}>
       <Stack.Screen name="Welcome" component={BottomTabNavigator} />
       <Stack.Group screenOptions={{ presentation: "modal", animation: "slide_from_bottom" }}>
         <Stack.Screen name="Transaction" component={TransactionDetails} />
       </Stack.Group>
-      <Stack.Screen name="AllTransactions" component={AllTransactions} />
+      <Stack.Screen options={{ presentation: "modal", animation: "slide_from_bottom" }} name="AllTransactions" component={AllTransactions} />
       <Stack.Group screenOptions={{ presentation: "modal", animation: "slide_from_bottom" }}>
         <Stack.Screen name="Settings" component={Settings} />
       </Stack.Group>

@@ -109,7 +109,7 @@ const API = {
   ],
 }
 
-export const Accounts = observer(function WelcomeScreen() {
+export const Accounts = observer(function Accounts() {
   const colorScheme = useColorScheme()
   const navigation = useNavigation()
 
