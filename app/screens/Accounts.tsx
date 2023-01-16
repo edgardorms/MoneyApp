@@ -130,10 +130,10 @@ interface Transaction {
   currency: string
 }
 
-
 export const Accounts = observer(function Accounts() {
   const colorScheme = useColorScheme()
   const navigation = useNavigation()
+
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -161,53 +161,64 @@ export const Accounts = observer(function Accounts() {
   const $recentTextColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
   }
-  
-    return (
-      <ScrollView style={[$containerApp, $containerAppColor]}>
-        <AccountHistory />
-        <FlatList
-          data={accounts}
-          keyExtractor={(item) => item.number}
-          renderItem={({ item }) => <AccountCard account={item} />}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-        />
 
-        <View style={$containerTransactionsSection}>
-          <View style={[$containerFlex, $containerFlexColor]}>
-            <View style={$containerRecentTransactions}>
-              <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
-              <TouchableOpacity onPress={() => navigation.navigate("AllTransactions")}>
-                <Image resizeMode="cover" source={require("../../assets/filter-button.png")} />
-              </TouchableOpacity>
-            </View>
+  const $viewAllTransactionsTextColor: TextStyle = {
+    color: colorScheme === "light" ? colors.palette.blue : colors.paletteBlack.white,
+  }
 
-            <View>
-              {transactions.slice(-5).map((transaction) => (
-                <TouchableOpacity
-                  key={transaction.idTransaction}
-                  onPress={() => navigation.navigate("Transaction")}
-                >
-                  <TransactionCard
-                    transaction={{
-                      idTransaction: transaction.idTransaction,
-                      type: transaction.type,
-                      description: transaction.description,
-                      datetime: transaction.datetime,
-                      amount: transaction.amount,
-                      currency: transaction.currency,
-                    }}
-                  />
-                </TouchableOpacity>
-              ))}
-            </View>
+  return (
+    <ScrollView style={[$containerApp, $containerAppColor]}>
+      <AccountHistory />
+      <FlatList
+        data={accounts}
+        keyExtractor={(item) => item.number}
+        renderItem={({ item }) => <AccountCard account={item} />}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+      />
+
+      <View style={$containerTransactionsSection}>
+        <View style={[$containerFlex, $containerFlexColor]}>
+          <View style={$containerRecentTransactions}>
+            <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
+            <TouchableOpacity>
+              <Image resizeMode="cover" source={require("../../assets/filter-button.png")} />
+            </TouchableOpacity>
           </View>
+
+          <View>
+            {transactions.slice(-5).map((transaction) => (
+              <TouchableOpacity
+                key={transaction.idTransaction}
+                onPress={() => navigation.navigate("Transaction")}
+              >
+                <TransactionCard
+                  transaction={{
+                    idTransaction: transaction.idTransaction,
+                    type: transaction.type,
+                    description: transaction.description,
+                    datetime: transaction.datetime,
+                    amount: transaction.amount,
+                    currency: transaction.currency,
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TouchableOpacity
+            style={$viewAllTransactions}
+            onPress={() => navigation.navigate("AllTransactions")}
+          >
+            <Text style={[$viewAllTransactionsText, $viewAllTransactionsTextColor]}>
+              View all transactions
+            </Text>
+          </TouchableOpacity>
         </View>
-        {/* <BottomTab /> */}
-      </ScrollView>
-    )
-  
+      </View>
+      {/* <BottomTab /> */}
+    </ScrollView>
+  )
 })
 
 const $containerTransactionsSection: ViewStyle = {
@@ -233,6 +244,7 @@ const $containerFlex: ViewStyle = {
   width: 351,
   // height: 369,
   borderRadius: 25,
+  marginBottom: 100,
 }
 
 const $recentText: TextStyle = {
@@ -241,4 +253,16 @@ const $recentText: TextStyle = {
   fontWeight: "600",
   lineHeight: 20,
   marginLeft: 15,
+}
+
+const $viewAllTransactions: ViewStyle = {
+  alignItems: "center",
+  marginTop: 10,
+}
+
+const $viewAllTransactionsText: TextStyle = {
+  fontFamily: "MonSemiBold",
+  fontSize: 15,
+  fontWeight: "600",
+  lineHeight: 20,
 }
