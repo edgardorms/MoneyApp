@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   Image,
   FlatList,
@@ -16,8 +16,13 @@ import AccountHistory from "../components/AccountHistory"
 import AccountCard from "../components/AccountCard"
 import TransactionCard from "../components/TransactionCard"
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
 
-const API = {
+const MockAdapter = require("axios-mock-adapter")
+
+const mock = new MockAdapter(axios)
+
+mock.onGet("/api").reply(200, {
   accounts: [
     {
       idAccount: 1,
@@ -107,11 +112,43 @@ const API = {
       currency: "USD",
     },
   ],
+})
+
+interface Account {
+  idAccount: number
+  type: string
+  number: string
+  balance: string
 }
+
+interface Transaction {
+  idTransaction: number
+  type: string
+  description: string
+  datetime: string
+  amount: number
+  currency: string
+}
+
 
 export const Accounts = observer(function Accounts() {
   const colorScheme = useColorScheme()
   const navigation = useNavigation()
+
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [accounts, setAccounts] = useState<Account[]>([])
+
+  useEffect(() => {
+    axios.get("/api").then(function (response) {
+      console.log(response.data)
+
+      setTransactions(response.data.transactions)
+      setAccounts(response.data.accounts)
+    })
+  }, [])
+
+  console.log(transactions)
+  console.log(accounts)
 
   const $containerAppColor: ViewStyle = {
     backgroundColor: colorScheme === "light" ? colors.palette.blue : colors.paletteBlack.gray_500,
@@ -124,52 +161,53 @@ export const Accounts = observer(function Accounts() {
   const $recentTextColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
   }
+  
+    return (
+      <ScrollView style={[$containerApp, $containerAppColor]}>
+        <AccountHistory />
+        <FlatList
+          data={accounts}
+          keyExtractor={(item) => item.number}
+          renderItem={({ item }) => <AccountCard account={item} />}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+        />
 
-  return (
-    <ScrollView style={[$containerApp, $containerAppColor]}>
-      <AccountHistory />
-      <FlatList
-        data={API.accounts}
-        keyExtractor={(item) => item.number}
-        renderItem={({ item }) => <AccountCard account={item} />}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-      />
-
-      <View style={$containerTransactionsSection}>
-        <View style={[$containerFlex, $containerFlexColor]}>
-          <View style={$containerRecentTransactions}>
-            <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("AllTransactions")}>
-              <Image resizeMode="cover" source={require("../../assets/filter-button.png")} />
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            {API.transactions.slice(-5).map((transaction) => (
-              <TouchableOpacity
-                key={transaction.idTransaction}
-                onPress={() => navigation.navigate("Transaction")}
-              >
-                <TransactionCard
-                  transaction={{
-                    idTransaction: transaction.idTransaction,
-                    type: transaction.type,
-                    description: transaction.description,
-                    datetime: transaction.datetime,
-                    amount: transaction.amount,
-                    currency: transaction.currency,
-                  }}
-                />
+        <View style={$containerTransactionsSection}>
+          <View style={[$containerFlex, $containerFlexColor]}>
+            <View style={$containerRecentTransactions}>
+              <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("AllTransactions")}>
+                <Image resizeMode="cover" source={require("../../assets/filter-button.png")} />
               </TouchableOpacity>
-            ))}
+            </View>
+
+            <View>
+              {transactions.slice(-5).map((transaction) => (
+                <TouchableOpacity
+                  key={transaction.idTransaction}
+                  onPress={() => navigation.navigate("Transaction")}
+                >
+                  <TransactionCard
+                    transaction={{
+                      idTransaction: transaction.idTransaction,
+                      type: transaction.type,
+                      description: transaction.description,
+                      datetime: transaction.datetime,
+                      amount: transaction.amount,
+                      currency: transaction.currency,
+                    }}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         </View>
-      </View>
-      {/* <BottomTab /> */}
-    </ScrollView>
-  )
+        {/* <BottomTab /> */}
+      </ScrollView>
+    )
+  
 })
 
 const $containerTransactionsSection: ViewStyle = {
