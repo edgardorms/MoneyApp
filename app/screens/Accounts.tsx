@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
   useColorScheme,
+  useWindowDimensions,
 } from "react-native"
 import { Text } from "../components"
 import { colors } from "../theme"
@@ -17,6 +18,7 @@ import AccountCard from "../components/AccountCard"
 import TransactionCard from "../components/TransactionCard"
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 
 const MockAdapter = require("axios-mock-adapter")
 
@@ -134,9 +136,23 @@ export const Accounts = observer(function Accounts() {
   const colorScheme = useColorScheme()
   const navigation = useNavigation()
 
-
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [accounts, setAccounts] = useState<Account[]>([])
+
+  const bottomTabBarHeight = useBottomTabBarHeight()
+
+  const { width: windowWidth } = useWindowDimensions()
+
+  const CARD_MARGIN_HORIZONTAL = 10
+  const CARD_OFFSET_HORIZONTAL = 8
+
+  const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 3 - CARD_OFFSET_HORIZONTAL 
+
+  const $containerFlexWidth: ViewStyle = {
+    width: CARD_WIDTH
+
+  }
+
 
   useEffect(() => {
     axios.get("/api").then(function (response) {
@@ -167,7 +183,10 @@ export const Accounts = observer(function Accounts() {
   }
 
   return (
-    <ScrollView style={[$containerApp, $containerAppColor]}>
+    <ScrollView
+      style={[$containerApp, $containerAppColor]}
+      contentContainerStyle={{ paddingBottom: bottomTabBarHeight + 10 }}
+    >
       <AccountHistory />
       <FlatList
         data={accounts}
@@ -179,7 +198,7 @@ export const Accounts = observer(function Accounts() {
       />
 
       <View style={$containerTransactionsSection}>
-        <View style={[$containerFlex, $containerFlexColor]}>
+        <View style={[$containerFlex, $containerFlexColor, $containerFlexWidth]}>
           <View style={$containerRecentTransactions}>
             <Text style={[$recentText, $recentTextColor]}>Recent transactions</Text>
             <TouchableOpacity>
@@ -216,15 +235,16 @@ export const Accounts = observer(function Accounts() {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <BottomTab /> */}
     </ScrollView>
   )
 })
+const SCREEN_PADDING_HORIZONTAL = 12
 
 const $containerTransactionsSection: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
-  marginTop: 10,
+  marginTop: 11,
+  marginHorizontal: SCREEN_PADDING_HORIZONTAL,
 }
 
 const $containerRecentTransactions: ViewStyle = {
@@ -240,11 +260,10 @@ const $containerApp: ViewStyle = {
 const $containerFlex: ViewStyle = {
   flexDirection: "column",
   alignItems: "stretch",
-  padding: 20,
-  width: 351,
-  // height: 369,
+  paddingHorizontal: 22,
+  paddingTop: 20,
+  paddingBottom: 30,
   borderRadius: 25,
-  marginBottom: 100,
 }
 
 const $recentText: TextStyle = {

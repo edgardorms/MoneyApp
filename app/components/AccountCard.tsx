@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TextStyle,
   useColorScheme,
+  useWindowDimensions,
 } from "react-native"
 import React from "react"
 import { colors } from "../theme/colors"
@@ -23,13 +24,15 @@ type Props = {
 const AccountCard: React.FC<Props> = (props) => {
   const colorScheme = useColorScheme()
 
-  const $subContainer: ViewStyle = {
-    width: 329,
-    height: 185,
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    paddingTop: 10,
-    paddingBottom: 13,
+  const { width: windowWidth } = useWindowDimensions()
+  
+const CARD_MARGIN_HORIZONTAL = 10
+const CARD_OFFSET_HORIZONTAL = 8
+
+  const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 4 - CARD_OFFSET_HORIZONTAL * 2
+  
+  const $subContainerWidth: ViewStyle = {
+    width: CARD_WIDTH,   
   }
 
   const $subContainerColor: ViewStyle = {
@@ -58,7 +61,7 @@ const AccountCard: React.FC<Props> = (props) => {
 
   return (
     <View style={$containerPrimary}>
-      <View style={[$subContainer, $subContainerColor]}>
+      <View style={[$subContainer, $subContainerColor, $subContainerWidth]}>
         <View style={$containerAccountNumber}>
           <View>
             <Text style={[$textAccount, $textAccountColor]}>{props.account.type}</Text>
@@ -92,6 +95,16 @@ const AccountCard: React.FC<Props> = (props) => {
 }
 
 export default AccountCard
+
+
+
+const $subContainer: ViewStyle = {
+  borderRadius: 25,
+  paddingHorizontal: 15,
+  paddingTop: 10,
+  paddingBottom: 13,
+}
+
 const $containerPrimary: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
