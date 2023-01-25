@@ -7,9 +7,16 @@ import {
   TextStyle,
   useColorScheme,
   useWindowDimensions,
+  Pressable,
 } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { colors } from "../theme/colors"
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated"
 
 interface Account {
   idAccount: number
@@ -20,19 +27,31 @@ interface Account {
 type Props = {
   account: Account
 }
+const CURRENCY_VIEW_WIDTH = 45
+const CURRENCY_VIEW_HEIGHT = 25
+const CURRENCY_VIEW_MARGIN_HORIZONTAL = 10
 
 const AccountCard: React.FC<Props> = (props) => {
   const colorScheme = useColorScheme()
+  const [activeBalance, setActiveBalance] = useState(0)
+
+  useEffect(() => {
+    const activeBalanceIndex = activeBalance
+    currencyPosition.value = withTiming(activeBalanceIndex, {
+      duration: 100,
+      easing: Easing.ease,
+    })
+  }, [activeBalance])
 
   const { width: windowWidth } = useWindowDimensions()
-  
-const CARD_MARGIN_HORIZONTAL = 10
-const CARD_OFFSET_HORIZONTAL = 8
+
+  const CARD_MARGIN_HORIZONTAL = 10
+  const CARD_OFFSET_HORIZONTAL = 8
 
   const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 4 - CARD_OFFSET_HORIZONTAL * 2
-  
+
   const $subContainerWidth: ViewStyle = {
-    width: CARD_WIDTH,   
+    width: CARD_WIDTH,
   }
 
   const $subContainerColor: ViewStyle = {
@@ -58,6 +77,20 @@ const CARD_OFFSET_HORIZONTAL = 8
   const $textBalanceColor: TextStyle = {
     color: colorScheme === "light" ? colors.palette.gray_300 : colors.paletteBlack.white,
   }
+  const currencyPosition = useSharedValue(0)
+
+  const $currencyPositionAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX:
+          currencyPosition.value * (CURRENCY_VIEW_WIDTH + CURRENCY_VIEW_MARGIN_HORIZONTAL),
+      },
+    ],
+  }))
+
+  const $activeCurrency = []
+
+  const $inactiveCurrencyText = [$textCardBlack, $textCardBlackColor]
 
   return (
     <View style={$containerPrimary}>
@@ -75,15 +108,32 @@ const CARD_OFFSET_HORIZONTAL = 8
         </View>
 
         <View style={$containerCoins}>
-          <View style={$cardCoins}>
-            <Text style={$textCardWhite}>EUR</Text>
-          </View>
-          <View>
-            <Text style={[$textCardBlack, $textCardBlackColor]}>USD</Text>
-          </View>
-          <View>
-            <Text style={[$textCardBlack, $textCardBlackColor]}>GBP</Text>
-          </View>
+          <Animated.View
+            style={[
+              $cardCoinsOff,
+              { backgroundColor: colors.palette.blue },
+              { position: "absolute" },
+              $currencyPositionAnimatedStyle,
+            ]}
+          />
+          <Pressable
+            style={activeBalance === 0 ? $cardCoinsOn : $cardCoinsOff}
+            onPress={() => setActiveBalance(0)}
+          >
+            <Text style={activeBalance === 0 ? $textCardWhite : $inactiveCurrencyText}>EUR</Text>
+          </Pressable>
+          <Pressable
+            style={activeBalance === 1 ? $cardCoinsOn : $cardCoinsOff}
+            onPress={() => setActiveBalance(1)}
+          >
+            <Text style={activeBalance === 1 ? $textCardWhite : $inactiveCurrencyText}>USD</Text>
+          </Pressable>
+          <Pressable
+            style={activeBalance === 2 ? $cardCoinsOn : $cardCoinsOff}
+            onPress={() => setActiveBalance(2)}
+          >
+            <Text style={activeBalance === 2 ? $textCardWhite : $inactiveCurrencyText}>GBP</Text>
+          </Pressable>
         </View>
         <View>
           <Text style={[$textBalanceNumber, $textBalanceNumberColor]}>{props.account.balance}</Text>
@@ -95,8 +145,6 @@ const CARD_OFFSET_HORIZONTAL = 8
 }
 
 export default AccountCard
-
-
 
 const $subContainer: ViewStyle = {
   borderRadius: 25,
@@ -136,11 +184,20 @@ const $containerCoins: ViewStyle = {
   marginBottom: 16,
 }
 
-const $cardCoins: ViewStyle = {
-  width: 45,
-  height: 25,
+const $cardCoinsOn: ViewStyle = {
+  marginRight: CURRENCY_VIEW_MARGIN_HORIZONTAL,
+  width: CURRENCY_VIEW_WIDTH,
+  height: CURRENCY_VIEW_HEIGHT,
   borderRadius: 8,
-  backgroundColor: colors.palette.blue,
+  justifyContent: "center",
+  alignItems: "center",
+}
+
+const $cardCoinsOff: ViewStyle = {
+  marginRight: CURRENCY_VIEW_MARGIN_HORIZONTAL,
+  width: CURRENCY_VIEW_WIDTH,
+  height: CURRENCY_VIEW_HEIGHT,
+  borderRadius: 8,
   justifyContent: "center",
   alignItems: "center",
 }

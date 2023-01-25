@@ -10,8 +10,9 @@ import {
   ViewStyle,
   useColorScheme,
   useWindowDimensions,
+  RefreshControl,
 } from "react-native"
-import { Text } from "../components"
+import { Text, Screen } from "../components"
 import { colors } from "../theme"
 import AccountHistory from "../components/AccountHistory"
 import AccountCard from "../components/AccountCard"
@@ -138,6 +139,7 @@ export const Accounts = observer(function Accounts() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [accounts, setAccounts] = useState<Account[]>([])
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const bottomTabBarHeight = useBottomTabBarHeight()
 
@@ -146,13 +148,11 @@ export const Accounts = observer(function Accounts() {
   const CARD_MARGIN_HORIZONTAL = 10
   const CARD_OFFSET_HORIZONTAL = 8
 
-  const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 3 - CARD_OFFSET_HORIZONTAL 
+  const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 3 - CARD_OFFSET_HORIZONTAL
 
   const $containerFlexWidth: ViewStyle = {
-    width: CARD_WIDTH
-
+    width: CARD_WIDTH,
   }
-
 
   useEffect(() => {
     axios.get("/api").then(function (response) {
@@ -183,11 +183,26 @@ export const Accounts = observer(function Accounts() {
   }
 
   return (
-    <ScrollView
+    <Screen
       style={[$containerApp, $containerAppColor]}
+      preset="scroll"
       contentContainerStyle={{ paddingBottom: bottomTabBarHeight + 10 }}
+      ScrollViewProps={{
+        overScrollMode: "always",
+        refreshControl: (
+          <RefreshControl
+            refreshing={isRefreshing}
+            // onRefresh={refreshData}
+            tintColor="white"
+            colors={["#523CF8"]}
+          />
+        ),
+      }}
     >
       <AccountHistory />
+      <View style={$pagination}>
+        <Image source={require("../../assets/pagination.png")} />
+      </View>
       <FlatList
         data={accounts}
         keyExtractor={(item) => item.number}
@@ -235,7 +250,7 @@ export const Accounts = observer(function Accounts() {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+    </Screen>
   )
 })
 const SCREEN_PADDING_HORIZONTAL = 12
@@ -284,4 +299,10 @@ const $viewAllTransactionsText: TextStyle = {
   fontSize: 15,
   fontWeight: "600",
   lineHeight: 20,
+}
+
+const $pagination: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "center",
+  marginTop: 31,
 }

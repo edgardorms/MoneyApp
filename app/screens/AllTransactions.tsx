@@ -121,34 +121,31 @@ export const AllTransactions = () => {
 
   return (
     <View style={$containerTransactionsSection}>
-    <ScrollView style={$containerFlex}>
-      {transactions.map((transaction) => (
-        <TouchableOpacity
-          key={transaction.idTransaction}
-          onPress={() => navigation.navigate("Transaction")}
-        >
-          <TransactionCard
-            transaction={{
-              idTransaction: transaction.idTransaction,
-              type: transaction.type,
-              description: transaction.description,
-              datetime: transaction.datetime,
-              amount: transaction.amount,
-              currency: transaction.currency,
-            }}
-          />
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+      <ScrollView style={$containerFlex}>
+        {transactions.map((transaction) => (
+          <TouchableOpacity
+            key={transaction.idTransaction}
+            onPress={() => navigation.navigate("Transaction")}
+          >
+            <TransactionCard
+              transaction={{
+                idTransaction: transaction.idTransaction,
+                type: transaction.type,
+                description: transaction.description,
+                datetime: transaction.datetime,
+                amount: transaction.amount,
+                currency: transaction.currency,
+              }}
+            />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   )
 }
 
 const $containerFlex: ViewStyle = {
   flexDirection: "column",
-  //padding: 20,
-  // width: 351,
-  // height: 369,
   borderRadius: 25,
 }
 
@@ -156,6 +153,6 @@ const $containerTransactionsSection: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
   margin: 25,
-  marginTop:45,
-  padding:6
+  marginTop: 45,
+  padding: 6,
 }

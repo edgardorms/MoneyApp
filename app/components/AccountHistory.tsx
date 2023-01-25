@@ -16,10 +16,6 @@ const AccountHistory = () => {
           <Image resizeMode="cover" source={require("../../assets/settings-2.png")} />
         </TouchableOpacity>
       </View>
-
-      <View style={$pagination}>
-        <Image source={require("../../assets/pagination.png")} />
-      </View>
     </View>
   )
 }
@@ -41,12 +37,6 @@ const $text1: TextStyle = {
 const $configIMG: ViewStyle = {
   marginLeft: 90,
   marginRight: 15,
-}
-
-const $pagination: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "center",
-  marginTop: 31,
 }
 
 export default AccountHistory
