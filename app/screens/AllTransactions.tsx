@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, ViewStyle } from "react-native"
+import { View, TouchableOpacity, ScrollView, ViewStyle } from "react-native"
 import React, { useEffect, useState } from "react"
 import TransactionCard from "../components/TransactionCard"
 import { useNavigation } from "@react-navigation/native"

@@ -11,6 +11,8 @@ import {
   useColorScheme,
   useWindowDimensions,
   RefreshControl,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from "react-native"
 import { Text, Screen } from "../components"
 import { colors } from "../theme"
@@ -20,6 +22,7 @@ import TransactionCard from "../components/TransactionCard"
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import {Dot} from '../components/Dot';
 
 const MockAdapter = require("axios-mock-adapter")
 
@@ -140,6 +143,14 @@ export const Accounts = observer(function Accounts() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [accounts, setAccounts] = useState<Account[]>([])
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const onMomentumScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const index = Math.ceil(event.nativeEvent.contentOffset.x / windowWidth)
+    setCurrentIndex(index)
+    //onChangeCurrentAccount(index)
+  }
+
 
   const bottomTabBarHeight = useBottomTabBarHeight()
 
@@ -192,7 +203,7 @@ export const Accounts = observer(function Accounts() {
         refreshControl: (
           <RefreshControl
             refreshing={isRefreshing}
-            // onRefresh={refreshData}
+           // onRefresh={refreshData}
             tintColor="white"
             colors={["#523CF8"]}
           />
@@ -201,7 +212,11 @@ export const Accounts = observer(function Accounts() {
     >
       <AccountHistory />
       <View style={$pagination}>
-        <Image source={require("../../assets/pagination.png")} />
+      <View style={$indicatorContainer}>
+        {accounts.map((account, index) => (
+          <Dot key={index} isSelected={index === currentIndex} />
+        ))}
+      </View>
       </View>
       <FlatList
         data={accounts}
@@ -209,6 +224,7 @@ export const Accounts = observer(function Accounts() {
         renderItem={({ item }) => <AccountCard account={item} />}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={onMomentumScrollEnd}
         pagingEnabled
       />
 
@@ -305,4 +321,11 @@ const $pagination: ViewStyle = {
   flexDirection: "row",
   justifyContent: "center",
   marginTop: 31,
+}
+
+const $indicatorContainer: ViewStyle = {
+  height: 15,
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
 }
