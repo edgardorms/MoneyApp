@@ -48,3 +48,19 @@ export interface ApiConfig {
    */
   timeout: number
 }
+
+export interface AccountDTO {
+  idAccount: number
+  type: string
+  number: string
+  balance: string
+}
+
+export interface TransactionDTO {
+  idTransaction: number
+  type: string
+  description: string
+  datetime: string
+  amount: number
+  currency: string
+}

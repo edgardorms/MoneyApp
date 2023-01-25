@@ -11,7 +11,9 @@ import {
 } from "apisauce"
 import Config from "../../config"
 import type {
+  AccountDTO,
   ApiConfig,
+  TransactionDTO,
 } from "./api.types"
 
 /**
@@ -44,7 +46,15 @@ export class Api {
     })
   }
 
-}
 
+  getAccounts() {
+    return this.apisauce.get<AccountDTO[]>("/accounts")
+  }
+
+  getTransactions(accountId: number, params: { offset?: number; size?: number } = {}) {
+    return this.apisauce.get<TransactionDTO[]>(`/accounts/${accountId}/transactions`, params)
+  }
+}
 // Singleton instance of the API for convenience
 export const api = new Api()
+

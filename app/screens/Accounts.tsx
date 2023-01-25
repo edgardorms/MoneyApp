@@ -23,118 +23,7 @@ import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import {Dot} from '../components/Dot';
-
-const MockAdapter = require("axios-mock-adapter")
-
-const mock = new MockAdapter(axios)
-
-mock.onGet("/api").reply(200, {
-  accounts: [
-    {
-      idAccount: 1,
-      type: "Current Account",
-      number: "1234-5678-9012-3456",
-      balance: "76.451,00",
-    },
-    {
-      idAccount: 2,
-      type: "Savings Account",
-      number: "2345-6789-0123-4567",
-      balance: "76.451,00",
-    },
-  ],
-  transactions: [
-    {
-      idTransaction: 1,
-      type: "Comute",
-      description: '"Golub" Taxi Transportation',
-      datetime: "20th May, 18:39",
-      amount: -345.0,
-      currency: "EUR",
-    },
-
-    {
-      idTransaction: 2,
-      type: "Restaurant",
-      description: '"Francois" Restaurant Dinner',
-      datetime: "15th May, 20:56",
-      amount: -1158.0,
-      currency: "EUR",
-    },
-    {
-      idTransaction: 3,
-      type: "Travel",
-      description: '"AirMax" Travel to Paris',
-      datetime: "14th May, 16:00",
-      amount: -813.0,
-      currency: "EUR",
-    },
-    {
-      idTransaction: 4,
-      type: "Personal",
-      description: "Construction ltd.",
-      datetime: "11th May, 09:26",
-      amount: 24500.0,
-      currency: "USD",
-    },
-    {
-      idTransaction: 5,
-      type: "Business",
-      description: "Robert Smith",
-      datetime: "14th May, 16:00",
-      amount: 11215,
-      currency: "USD",
-    },
-    {
-      idTransaction: 6,
-      type: "Business",
-      description: "Robert Smith",
-      datetime: "14th May, 16:00",
-      amount: 11215,
-      currency: "USD",
-    },
-    {
-      idTransaction: 7,
-      type: "Business",
-      description: "Robert Smith",
-      datetime: "14th May, 16:00",
-      amount: 11215,
-      currency: "USD",
-    },
-    {
-      idTransaction: 8,
-      type: "Business",
-      description: "Robert Smith",
-      datetime: "14th May, 16:00",
-      amount: 11215,
-      currency: "USD",
-    },
-    {
-      idTransaction: 9,
-      type: "Business",
-      description: "Robert Smith",
-      datetime: "14th May, 16:00",
-      amount: 11215,
-      currency: "USD",
-    },
-  ],
-})
-
-interface Account {
-  idAccount: number
-  type: string
-  number: string
-  balance: string
-}
-
-interface Transaction {
-  idTransaction: number
-  type: string
-  description: string
-  datetime: string
-  amount: number
-  currency: string
-}
+import { AccountDTO, api } from "../services/api"
 
 export const Accounts = observer(function Accounts() {
   const colorScheme = useColorScheme()
@@ -144,11 +33,12 @@ export const Accounts = observer(function Accounts() {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [activeAccountId, setActiveAccountId] = useState<AccountDTO["idAccount"]>()
+
 
   const onMomentumScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.ceil(event.nativeEvent.contentOffset.x / windowWidth)
     setCurrentIndex(index)
-    //onChangeCurrentAccount(index)
   }
 
 
@@ -166,16 +56,42 @@ export const Accounts = observer(function Accounts() {
   }
 
   useEffect(() => {
-    axios.get("/api").then(function (response) {
-      console.log(response.data)
-
-      setTransactions(response.data.transactions)
-      setAccounts(response.data.accounts)
-    })
+    
+  fetchAccounts()
+    
   }, [])
+  
 
-  console.log(transactions)
-  console.log(accounts)
+  useEffect(() => {
+    if (!activeAccountId && accounts && accounts.length > 0) {
+      setActiveAccountId(accounts[0].idAccount)
+    }
+  }, [accounts])
+
+  useEffect(() => {
+    if (activeAccountId) {
+     // setTransactions(undefined)
+      fetchTransactions(activeAccountId)
+    }
+  }, [activeAccountId])
+
+  const fetchAccounts = async () => {
+    const { data } = await api.getAccounts()
+    setAccounts(data)
+  }
+
+  const fetchTransactions = async (accountId: AccountDTO["idAccount"]) => {
+    const { data } = await api.getTransactions(accountId, { size: 5 })
+    setTransactions(data)
+  }
+
+  const refreshData = async () => {
+    setIsRefreshing(true)
+    await Promise.all([fetchAccounts(), activeAccountId && fetchTransactions(activeAccountId)])
+    setIsRefreshing(false)
+  }
+
+
 
   const $containerAppColor: ViewStyle = {
     backgroundColor: colorScheme === "light" ? colors.palette.blue : colors.paletteBlack.gray_500,
@@ -203,7 +119,7 @@ export const Accounts = observer(function Accounts() {
         refreshControl: (
           <RefreshControl
             refreshing={isRefreshing}
-           // onRefresh={refreshData}
+            onRefresh={refreshData}
             tintColor="white"
             colors={["#523CF8"]}
           />
@@ -238,7 +154,7 @@ export const Accounts = observer(function Accounts() {
           </View>
 
           <View>
-            {transactions.slice(-5).map((transaction) => (
+            {transactions.map((transaction) => (
               <TouchableOpacity
                 key={transaction.idTransaction}
                 onPress={() => navigation.navigate("Transaction")}

@@ -11,12 +11,7 @@ import {
 } from "react-native"
 import React, { useEffect, useState } from "react"
 import { colors } from "../theme/colors"
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
 interface Account {
   idAccount: number
@@ -44,14 +39,14 @@ const AccountCard: React.FC<Props> = (props) => {
   }, [activeBalance])
 
   const { width: windowWidth } = useWindowDimensions()
-
-  const CARD_MARGIN_HORIZONTAL = 10
-  const CARD_OFFSET_HORIZONTAL = 8
+  
+const CARD_MARGIN_HORIZONTAL = 10
+const CARD_OFFSET_HORIZONTAL = 8
 
   const CARD_WIDTH = windowWidth - CARD_MARGIN_HORIZONTAL * 4 - CARD_OFFSET_HORIZONTAL * 2
-
+  
   const $subContainerWidth: ViewStyle = {
-    width: CARD_WIDTH,
+    width: CARD_WIDTH,   
   }
 
   const $subContainerColor: ViewStyle = {
@@ -88,6 +83,7 @@ const AccountCard: React.FC<Props> = (props) => {
     ],
   }))
 
+
   const $activeCurrency = []
 
   const $inactiveCurrencyText = [$textCardBlack, $textCardBlackColor]
@@ -108,31 +104,22 @@ const AccountCard: React.FC<Props> = (props) => {
         </View>
 
         <View style={$containerCoins}>
-          <Animated.View
-            style={[
-              $cardCoinsOff,
-              { backgroundColor: colors.palette.blue },
-              { position: "absolute" },
-              $currencyPositionAnimatedStyle,
-            ]}
-          />
-          <Pressable
-            style={activeBalance === 0 ? $cardCoinsOn : $cardCoinsOff}
-            onPress={() => setActiveBalance(0)}
-          >
-            <Text style={activeBalance === 0 ? $textCardWhite : $inactiveCurrencyText}>EUR</Text>
+        <Animated.View
+          style={[
+            $cardCoinsOff,
+            {backgroundColor: colors.palette.blue},
+            { position: "absolute" },
+            $currencyPositionAnimatedStyle,
+          ]}
+        />
+          <Pressable style={ activeBalance === 0  ? $cardCoinsOn : $cardCoinsOff }  onPress={() => setActiveBalance(0)}>
+            <Text style={ activeBalance === 0  ? $textCardWhite : $inactiveCurrencyText}>EUR</Text>
           </Pressable>
-          <Pressable
-            style={activeBalance === 1 ? $cardCoinsOn : $cardCoinsOff}
-            onPress={() => setActiveBalance(1)}
-          >
-            <Text style={activeBalance === 1 ? $textCardWhite : $inactiveCurrencyText}>USD</Text>
-          </Pressable>
-          <Pressable
-            style={activeBalance === 2 ? $cardCoinsOn : $cardCoinsOff}
-            onPress={() => setActiveBalance(2)}
-          >
-            <Text style={activeBalance === 2 ? $textCardWhite : $inactiveCurrencyText}>GBP</Text>
+          <Pressable style={ activeBalance === 1  ? $cardCoinsOn : $cardCoinsOff } onPress={() => setActiveBalance(1)}>
+            <Text style={ activeBalance === 1  ? $textCardWhite : $inactiveCurrencyText}>USD</Text>
+          </Pressable >
+          <Pressable style={ activeBalance === 2  ? $cardCoinsOn : $cardCoinsOff } onPress={() => setActiveBalance(2)}>
+            <Text style={ activeBalance === 2  ? $textCardWhite : $inactiveCurrencyText}>GBP</Text>
           </Pressable>
         </View>
         <View>
@@ -145,6 +132,8 @@ const AccountCard: React.FC<Props> = (props) => {
 }
 
 export default AccountCard
+
+
 
 const $subContainer: ViewStyle = {
   borderRadius: 25,
